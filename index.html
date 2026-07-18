@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>施工期臨時沉砂池設計計算 | Temporary Sediment Basin Design</title>
+<script src="https://yj-chen0830.github.io/jrh-core/jrh-core.js?v=3" defer></script>
+<style>
+  :root{--navy:#0b1f3a;--navy2:#13284a;--gold:#c9a14a;--gold2:#e0bf6e;--bg:#f5f3ee;--ink:#1c2530;--line:#d8d2c2;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Noto Sans TC","Segoe UI",sans-serif;background:var(--bg);color:var(--ink);}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#f5f3ee;padding:28px 32px;}
+  header h1{margin:0;font-size:22px;}
+  header span{color:var(--gold2);font-size:13px;display:block;margin-top:4px;}
+  main{max-width:1120px;margin:0 auto;padding:28px 20px 60px;}
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:24px;}
+  @media(max-width:860px){.grid{grid-template-columns:1fr;}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .card h2{font-size:14.5px;margin:0 0 18px;color:var(--navy);font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--gold);padding-bottom:10px;}
+  label{display:block;font-size:12px;color:#666;margin:10px 0 4px;font-weight:500;}
+  input,select{width:100%;padding:8px 11px;border:1.5px solid var(--line);border-radius:7px;font-size:13.5px;background:#fafaf8;}
+  input:focus,select:focus{outline:none;border-color:var(--gold);}
+  .sec{font-size:12px;font-weight:700;color:var(--navy);margin:16px 0 6px;border-left:4px solid var(--gold);padding-left:9px;letter-spacing:.04em;text-transform:uppercase;}
+  .note{font-size:11.5px;color:#666;margin-top:12px;line-height:1.75;background:#f9f7f2;border-radius:6px;padding:9px 12px;}
+  .hint{font-size:11px;color:#8a877f;margin-top:4px;}
+  button.calc-btn{margin-top:16px;width:100%;padding:12px;border:none;border-radius:8px;background:var(--navy);color:#fff;font-size:14.5px;font-weight:700;cursor:pointer;}
+  button.calc-btn:hover{background:var(--navy2);}
+  button.pro-btn{margin-top:12px;width:100%;padding:12px;border:none;border-radius:8px;background:var(--gold);color:var(--navy);font-size:14.5px;font-weight:700;cursor:pointer;}
+  button.pro-btn:hover{filter:brightness(1.08);}
+  table{width:100%;border-collapse:collapse;margin-top:10px;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  th{background:var(--navy);color:#f5f3ee;font-weight:600;font-size:12px;padding:9px 10px;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  td{padding:9px 10px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#f9f7f3;}
+  td:last-child{text-align:right;font-weight:700;}
+  .ok{color:#1a7d3a;font-weight:700;}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#edf4ea;color:#1a7d3a;font-size:11px;font-weight:700;}
+  .warn{display:inline-block;padding:2px 8px;border-radius:999px;background:#fff4dd;color:#8a5a00;font-size:11px;font-weight:700;}
+  details.proc{margin-top:16px;border:1px solid var(--line);border-radius:8px;background:#fafaf8;overflow:hidden;}
+  details.proc summary{cursor:pointer;padding:10px 14px;font-weight:700;font-size:13px;color:var(--navy);user-select:none;list-style:none;display:flex;align-items:center;gap:6px;}
+  details.proc summary::before{content:"▶";font-size:10px;transition:transform .2s;}
+  details[open].proc summary::before{transform:rotate(90deg);}
+  details.proc pre{margin:0;padding:12px 16px 16px;font-family:"Courier New",monospace;font-size:11.5px;line-height:1.9;white-space:pre-wrap;color:#2c3e50;border-top:1px solid var(--line);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .proj-section{background:#fff;border:1px solid var(--gold);border-radius:10px;padding:18px 22px;margin-bottom:20px;}
+  .proj-section h3{margin:0 0 12px;color:var(--navy);font-size:14px;font-weight:700;}
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:600px){.proj-grid,.row2{grid-template-columns:1fr;}}
+  .mob-tabs{display:none;}
+  @media screen and (max-width:767px){
+    .mob-tabs{display:flex;background:var(--bg);border-bottom:2px solid var(--line);margin:0 -20px 0;padding:0 20px;}
+    .mob-tab{flex:1;padding:11px 4px;text-align:center;font-size:13.5px;font-weight:700;color:#888;cursor:pointer;background:transparent;border:none;border-bottom:3px solid transparent;}
+    .mob-tab.active{color:var(--navy);border-bottom-color:var(--gold);}
+    .grid{display:block;}
+    .grid>.card{display:none;}
+    .grid>.card.mob-active{display:block;}
+  }
+  @media print{
+    header,.no-print{display:none!important;}
+    body{background:#fff;margin:0;font-size:9pt;line-height:1.5;color:#111;}
+    main{padding:0;max-width:100%!important;}
+    .grid{grid-template-columns:1fr!important;gap:10pt!important;}
+    .card{box-shadow:none!important;border:1px solid #ccc!important;border-radius:4pt!important;padding:10pt 12pt!important;break-inside:avoid;}
+    .card h2{font-size:10.5pt!important;padding-bottom:6pt!important;margin-bottom:9pt!important;}
+    label{font-size:8pt!important;margin:6pt 0 2pt!important;}
+    .sec{font-size:8pt!important;margin:10pt 0 4pt!important;}
+    .note,.hint{font-size:7.5pt!important;padding:6pt 9pt!important;}
+    table{border:1px solid #bbb!important;border-radius:0!important;margin-top:6pt!important;}
+    th{font-size:8pt!important;padding:5pt 7pt!important;background:#0b1f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    td{font-size:8.5pt!important;padding:5pt 7pt!important;}
+    tr:nth-child(even) td{background:#f5f5f5!important;}
+    details.proc{display:block!important;margin-top:10pt!important;border:1pt solid #0b1f3a!important;border-radius:4pt!important;break-inside:avoid;background:#f9f9f6!important;}
+    details.proc>summary{display:none!important;}
+    details.proc::before{content:"📋  計算過程（供第三方檢核）";display:block;font-weight:700;font-size:8pt;color:#0b1f3a;padding:6pt 10pt 4pt;border-bottom:1px solid #ccc;letter-spacing:.04em;}
+    details.proc>pre{font-size:7pt!important;line-height:1.65!important;white-space:pre-wrap!important;padding:6pt 10pt 10pt!important;color:#1a1a1a!important;font-family:"Courier New",monospace!important;}
+    .proj-section{border:1.5pt solid #0b1f3a!important;border-radius:4pt!important;}
+    button.pro-btn,button.calc-btn{display:none!important;}
+    @page{margin:15mm 12mm;size:A4;}
+  }
+</style>
+</head>
+<body data-tool="tsb">
+<header>
+  <a href="https://yj-chen0830.github.io/engineering-hub/" style="color:var(--gold2);font-size:12.5px;text-decoration:none;display:inline-block;margin-bottom:8px;">← 返回工程計算中心</a>
+  <h1>🏔️ 施工期臨時沉砂池設計</h1>
+  <span>法規容積法 + 停留時間法並列比對 · 池體尺寸建議 · 溢流堰長度概估</span>
+</header>
+<main>
+
+<div class="proj-section no-print" id="projSection">
+  <h3>📁 專案資訊（列印時帶入計算書封面）</h3>
+  <div class="proj-grid">
+    <div><label>工程名稱</label><input id="pj-name" placeholder="○○整地或邊坡整治工程"></div>
+    <div><label>工程地點</label><input id="pj-loc" placeholder="○○市○○區"></div>
+    <div><label>承造廠商</label><input id="pj-contractor" placeholder="○○營造股份有限公司"></div>
+    <div><label>文件編號</label><input id="pj-docno" placeholder="TSB-CAL-001"></div>
+    <div><label>計算者</label><input id="pj-calc" placeholder="姓名"></div>
+    <div><label>審核者</label><input id="pj-review" placeholder="姓名"></div>
+    <div><label>計算日期</label><input id="pj-date" type="date"></div>
+  </div>
+</div>
+
+<div class="mob-tabs">
+  <button class="mob-tab active" onclick="switchMobTab('tsb-in',this)">📋 輸入參數</button>
+  <button class="mob-tab" id="mobTab-tsb-r" onclick="switchMobTab('tsb-r',this)">📊 計算結果</button>
+</div>
+
+<div class="grid">
+  <div class="card mob-active" data-tab="tsb-in">
+    <h2>沉砂池設計輸入</h2>
+
+    <div class="sec">方法一｜法規容積法</div>
+    <div class="row2">
+      <div><label>集水面積 A (ha)</label><input id="tsb-A" type="number" value="2" step="0.01" min="0.01"></div>
+      <div><label>容積係數 k (m³/ha)</label><input id="tsb-k" type="number" value="50" step="1" min="1"></div>
+    </div>
+    <div class="hint">一般開發基地可先以 50 m³/ha 作為最小值起算，再依送審要求調整。</div>
+
+    <div class="sec">方法二｜停留時間法</div>
+    <div class="row2">
+      <div><label>逕流係數 C</label><input id="tsb-C" type="number" value="0.6" step="0.01" min="0" max="1"></div>
+      <div><label>降雨強度 I (mm/hr)</label><input id="tsb-I" type="number" value="80" step="1" min="0"></div>
+    </div>
+    <div class="row2">
+      <div><label>集水面積 A (ha)</label><input id="tsb-Aq" type="number" value="2" step="0.01" min="0.01"></div>
+      <div><label>設計停留時間 t (min)</label><input id="tsb-t" type="number" value="15" step="1" min="1"></div>
+    </div>
+    <label>直接輸入設計逕流量 Q (cms，留白則採合理化公式)</label>
+    <input id="tsb-Q" type="number" value="" step="0.001" min="0" placeholder="例如 0.267；空白則由 C×I×A/360 計算">
+
+    <div class="sec">池體與出流口</div>
+    <div class="row2">
+      <div><label>池深 depth (m)</label><input id="tsb-depth" type="number" value="1.8" step="0.1" min="0.5"></div>
+      <div><label>長寬比 L:W</label><input id="tsb-ratio" type="number" value="2" step="0.1" min="1"></div>
+    </div>
+    <div class="row2">
+      <div><label>容許出流水深 Ho (m)</label><input id="tsb-Ho" type="number" value="0.3" step="0.01" min="0.05"></div>
+      <div><label>堰流採用 Q (cms)</label>
+        <select id="tsb-weir-q-mode">
+          <option value="design">採設計逕流量 Q</option>
+          <option value="governing">採 governing 方法對應流量</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcTSB()">計算臨時沉砂池</button>
+    <div class="note">本工具依台灣水土保持技術規範之設計精神，先以法規最低容積檢核，再以水理停留時間估算所需池容，兩者取大值作為設計依據。適用施工期間臨時設施之初步配置；正式送審仍應配合基地排水分區、入流泥砂性質、清淤頻率、邊坡保護及現地施工條件整體檢討。</div>
+  </div>
+
+  <div class="card" data-tab="tsb-r">
+    <h2>計算結果</h2>
+    <div id="tsb-result"><p style="color:#888">尚未計算</p></div>
+    <details class="proc" id="tsb-proc" style="display:none">
+      <summary>📋 計算過程（供第三方檢核）</summary>
+      <pre id="tsb-proc-text"></pre>
+    </details>
+    <button class="pro-btn no-print" onclick="openPro()">📄 產出計算書 PDF</button>
+  </div>
+</div>
+
+</main>
+<script>
+function switchMobTab(name,btn){
+  btn.parentElement.querySelectorAll('.mob-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  btn.parentElement.nextElementSibling.querySelectorAll('.card').forEach(function(c){
+    c.classList.toggle('mob-active',c.dataset.tab===name);
+  });
+}
+function openPro(){ JRH.checkEmail(function(){ jrhPrint('施工期臨時沉砂池設計計算書'); }); }
+function v(id){
+  var el=document.getElementById(id);
+  if(!el) return 0;
+  if(el.value===''||el.value===null) return 0;
+  return parseFloat(el.value)||0;
+}
+function raw(id){
+  var el=document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function f1(x){return x.toFixed(1);}
+function f2(x){return x.toFixed(2);}
+function f3(x){return x.toFixed(3);}
+
+function calcTSB(){
+  var A=v('tsb-A');
+  var k=v('tsb-k');
+  var C=v('tsb-C');
+  var I=v('tsb-I');
+  var Aq=v('tsb-Aq');
+  var t=v('tsb-t');
+  var qInput=raw('tsb-Q');
+  var Qmanual=qInput===''?null:v('tsb-Q');
+  var depth=v('tsb-depth');
+  var ratio=v('tsb-ratio');
+  var Ho=v('tsb-Ho');
+  var weirMode=document.getElementById('tsb-weir-q-mode').value;
+
+  var V1=k*A;
+  var Qrational=C*I*Aq/360;
+  var Q=Qmanual!==null ? Qmanual : Qrational;
+  var V2=Q*t*60;
+  var governing=V1>=V2?'方法一｜法規容積法':'方法二｜停留時間法';
+  var Vdesign=Math.max(V1,V2);
+  var As=depth>0 ? Vdesign/depth : 0;
+  var W=ratio>0 ? Math.sqrt(As/ratio) : 0;
+  var L=W*ratio;
+  var Qweir=weirMode==='governing' && V1>=V2 ? Qrational : Q;
+  var Lweir=(Ho>0 && Qweir>0) ? Qweir/(1.7*Math.pow(Ho,1.5)) : 0;
+
+  var res=document.getElementById('tsb-result');
+  res.innerHTML=
+    '<table><tr><th>項目</th><th>數值</th></tr>'+
+    '<tr><td>方法一最小容積 V1</td><td>'+f2(V1)+' m³</td></tr>'+
+    '<tr><td>合理化公式估算 Q = C×I×A/360</td><td>'+f3(Qrational)+' cms</td></tr>'+
+    '<tr><td>採用設計逕流量 Q</td><td>'+f3(Q)+' cms'+(Qmanual!==null?' <span class="warn">手動輸入</span>':' <span class="pill">公式估算</span>')+'</td></tr>'+
+    '<tr><td>方法二水理容積 V2</td><td>'+f2(V2)+' m³</td></tr>'+
+    '<tr><td>設計控制方法</td><td>'+governing+'</td></tr>'+
+    '<tr><td>設計容積 Vdesign</td><td>'+f2(Vdesign)+' m³</td></tr>'+
+    '<tr><td>池表面積 As = Vdesign/depth</td><td>'+f2(As)+' m²</td></tr>'+
+    '<tr><td>建議池寬 W</td><td>'+f2(W)+' m</td></tr>'+
+    '<tr><td>建議池長 L</td><td>'+f2(L)+' m</td></tr>'+
+    '<tr><td>矩形寬頂堰所需堰長 Lweir</td><td>'+f2(Lweir)+' m</td></tr>'+
+    '</table>';
+
+  var p='';
+  p+='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  p+='  施工期臨時沉砂池設計計算過程\n';
+  p+='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+  p+='【輸入】\n';
+  p+='  方法一：A='+A+' ha, k='+k+' m³/ha\n';
+  p+='  方法二：C='+C+', I='+I+' mm/hr, A='+Aq+' ha, t='+t+' min\n';
+  p+='  Q採用值 = '+(Qmanual!==null ? '手動輸入 '+f3(Qmanual)+' cms' : '合理化公式計算')+'\n';
+  p+='  池深 depth='+depth+' m, 長寬比 L:W='+ratio+':1, Ho='+Ho+' m\n\n';
+  p+='【一】方法一：法規容積法\n';
+  p+='  V1 = k × A = '+k+' × '+A+' = '+f2(V1)+' m³\n\n';
+  p+='【二】方法二：停留時間法\n';
+  p+='  合理化公式 Qr = C × I × A / 360\n';
+  p+='     = '+C+' × '+I+' × '+Aq+' / 360 = '+f3(Qrational)+' cms\n';
+  if(Qmanual!==null){
+    p+='  直接輸入設計逕流量 Q = '+f3(Qmanual)+' cms（本次 V2 採此值）\n';
+  }else{
+    p+='  本次設計逕流量 Q 採 Qr = '+f3(Q)+' cms\n';
+  }
+  p+='  V2 = Q × t × 60 = '+f3(Q)+' × '+t+' × 60 = '+f2(V2)+' m³\n\n';
+  p+='【三】兩法比較\n';
+  p+='  V1 = '+f2(V1)+' m³\n';
+  p+='  V2 = '+f2(V2)+' m³\n';
+  p+='  Vdesign = max(V1, V2) = '+f2(Vdesign)+' m³\n';
+  p+='  Governing = '+governing+'\n\n';
+  p+='【四】池體尺寸建議\n';
+  p+='  As = Vdesign / depth = '+f2(Vdesign)+' / '+depth+' = '+f2(As)+' m²\n';
+  p+='  W = sqrt(As / 比值) = sqrt('+f2(As)+' / '+ratio+') = '+f2(W)+' m\n';
+  p+='  L = W × 比值 = '+f2(W)+' × '+ratio+' = '+f2(L)+' m\n\n';
+  p+='【五】出流口（矩形寬頂堰）概估\n';
+  p+='  採用 Qweir = '+f3(Qweir)+' cms，Ho = '+Ho+' m\n';
+  p+='  Qweir = 1.7 × Lweir × Ho^1.5\n';
+  p+='  Lweir = Qweir / (1.7 × Ho^1.5)\n';
+  p+='        = '+f3(Qweir)+' / (1.7 × '+Ho+'^1.5) = '+f2(Lweir)+' m\n\n';
+  p+='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  p+='  說明：臨時沉砂池配置仍應配合清淤管理、自由高、入流消能、護岸穩定與施工便道條件綜合調整。\n';
+  p+='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+
+  document.getElementById('tsb-proc-text').textContent=p;
+  document.getElementById('tsb-proc').style.display='';
+  if(window.innerWidth<768){var b=document.getElementById('mobTab-tsb-r');if(b)switchMobTab('tsb-r',b);}
+}
+
+calcTSB();
+</script>
+<script>
+window.jrhDocMeta={
+  "doc":"施工期臨時沉砂池設計計算書",
+  "codes":[
+    "水土保持技術規範（施工中防災與臨時沉砂設施設計精神）",
+    "合理化公式 Q = C I A / 360（A: ha, I: mm/hr, Q: cms）",
+    "矩形寬頂堰公式 Q = 1.7 L H^1.5"
+  ],
+  "notes":[
+    "本工具採兩法並列：法規最小容積與停留時間水理容積，取較大值作為施工期臨時沉砂池之設計依據。",
+    "容積係數 k、停留時間 t、逕流係數 C 與設計降雨強度 I，應依基地條件、主管機關審查要求與當地降雨特性調整。",
+    "池深、長寬比及堰長為初步配置建議，正式設計仍應檢討自由高、邊坡穩定、防沖刷、進出流水工與清淤動線。",
+    "若設計逕流量非以合理化公式決定，可直接輸入 Q；本工具仍同步顯示公式估算值，供比對與檢核。",
+    "本計算書僅供初步設計與內部檢核，正式送審資料應由具權責之專業技師依現地調查成果完整審定。"
+  ]
+};
+</script>
+</body>
+</html>
